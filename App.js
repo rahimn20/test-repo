@@ -1,32 +1,25 @@
 const express = require("express");
-// const mongoose = require("mongoose");
-const students = require("./students")
-// const port = 4000;
-// const app = express();
-const database = require("./db")
+const mongoose = require("mongoose");
 
-// mongoose.connect(MONGO_URI)
+require('dotenv').config({ path: './.env' });
 
-// app.get("/api", (req, res) => {
-//   res.json({ "rows": [
-//     {
-//         "id": 1,
-//       "name": "Rahim",
-//       "sex": "male",
-//       "place": "Lahore",
-      
-//     },
-//     {
-//         "id": 2,
-//       "name": "Hello There",
-//       "sex": "male",
-//       "place": "Lahore",
-//     }] });
-// });
+const Student = require("./models/studentModel")
+const studentRouter = require('./routes/studentRoutes');
 
-// app.listen(port, () => {
-//   console.log(`Port listening to: ${port}`);
-// });
+const app = express();
 
-students;
-database;
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log('Connected to DB. 🚀');
+  });
+
+
+app.use('/students', studentRouter);
+
+
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}.`);
+});
